@@ -22,7 +22,8 @@ export namespace Types {
         proposal_counter: nat,
         proposal_map: big_map<nat, proposal>,
         signers: set<address>,
-        threshold: nat
+        threshold: nat,
+        metadata: big_map<string, bytes>
     };
 };
 
@@ -35,7 +36,8 @@ export namespace Utils {
         proposal_counter: 0 as nat,
         proposal_map: Big_map.empty as big_map<nat, Types.proposal>,
         signers: signers,
-        threshold: threshold
+        threshold: threshold,
+        metadata: (Big_map.empty as big_map<string, bytes>)
     });
 
 

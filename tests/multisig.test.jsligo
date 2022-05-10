@@ -46,12 +46,14 @@ const signers: set<address> = Set.add(
 const threshold: nat = 3 as nat;
 const proposal_map: big_map<nat, Main.Storage.Types.proposal> = Big_map.empty;
 const proposal_counter: nat = 0 as nat;
+const metadata_initial: big_map<string, bytes> = Big_map.empty;
 const c: unit = Test.log("here");
 const storage: Main.Storage.Types.t = ({
     signers: signers,
     threshold: threshold,
     proposal_map: proposal_map,
-    proposal_counter: proposal_counter
+    proposal_counter: proposal_counter,
+    metadata: metadata_initial
 });
 const v: unit = Test.log("here");
 
