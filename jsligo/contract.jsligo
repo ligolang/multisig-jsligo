@@ -9,7 +9,7 @@
 namespace Preamble {
     const prepare_new_proposal = ([params, storage]: [Parameter.Types.proposal_params, Storage.Types.t]): Storage.Types.proposal => {
         Conditions.only_signer(storage);
-        Conditions.amount_must_be_zero_tez(Tezos.amount); 
+        Conditions.amount_must_be_zero_tez((Tezos.get_amount ())); 
         return Storage.Utils.create_proposal(params);
     };
 
@@ -37,7 +37,7 @@ const create_proposal = ([params, storage]: [Parameter.Types.proposal_params, St
 
 const sign_proposal = ([proposal_number, storage]: [nat, Storage.Types.t]): result => {
     let proposal = Preamble.retrieve_a_proposal(proposal_number, storage);
-    proposal = Storage.Utils.add_signer_to_proposal(proposal, Tezos.sender, storage.threshold);
+    proposal = Storage.Utils.add_signer_to_proposal(proposal, (Tezos.get_sender ()), storage.threshold);
     const final_storage = Storage.Utils.update_proposal(proposal_number, proposal, storage);
     const operations = FA2.perform_operations(proposal);
 

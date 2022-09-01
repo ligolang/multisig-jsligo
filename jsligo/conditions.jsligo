@@ -3,7 +3,7 @@
 
 // @inline
 const only_signer = (storage: Storage.Types.t): unit => 
-    assert_with_error(Set.mem(Tezos.sender, storage.signers), Errors.only_signer);
+    assert_with_error(Set.mem((Tezos.get_sender ()), storage.signers), Errors.only_signer);
 
 // @inline
 const amount_must_be_zero_tez = (an_amout: tez) : unit =>
@@ -11,5 +11,5 @@ const amount_must_be_zero_tez = (an_amout: tez) : unit =>
 
 // @inline
 const not_yet_signer = (proposal: Storage.Types.proposal): unit =>
-    assert_with_error(!Set.mem(Tezos.sender, proposal.approved_signers), Errors.has_already_signed);
+    assert_with_error(!Set.mem((Tezos.get_sender ()), proposal.approved_signers), Errors.has_already_signed);
 
