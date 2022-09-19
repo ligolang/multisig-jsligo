@@ -4,7 +4,7 @@
 #import "../../fa2/fa2.mligo" "FA2"
 
 const send = ([transfers, target_fa2_address]: [FA2.transfer, address]): operation => {
-    [@no_mutation]const fa2_contract_opt: option<contract<FA2.transfer>> = Tezos.get_entrypoint_opt("%transfer", target_fa2_address);
+    /* @no_mutation */ const fa2_contract_opt: option<contract<FA2.transfer>> = Tezos.get_entrypoint_opt("%transfer", target_fa2_address);
     return match(fa2_contract_opt, {
     Some: (contr: contract<FA2.transfer>) => Tezos.transaction(transfers, 0 as tez, contr),
     None: () => failwith(Errors.unknown_contract_entrypoint)
