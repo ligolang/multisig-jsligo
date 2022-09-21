@@ -1,4 +1,6 @@
-ligo_compiler=docker run --rm -v "$$PWD":"$$PWD" -w "$$PWD" ligolang/ligo:stable
+ligo_compiler=docker run --rm -v "$(PWD)":"$(PWD)" -w "$(PWD)" ligolang/ligo:stable
+# ^ Override this variable when you run make command by make <COMMAND> ligo_compiler=<LIGO_EXECUTABLE>
+# ^ Otherwise use default one (you'll need docker)
 PROTOCOL_OPT=
 json=--michelson-format json
 
@@ -10,7 +12,7 @@ help:
 	@echo  '  compile '
 	@echo  '  clean           - Remove generated Michelson and JavaScript files'
 	@echo  '  test            - Run Ligo tests'
-	@echo  '  originate       - Deploy multisig smart contract (typescript using Taquito)'
+	@echo  '  deploy       - Deploy multisig smart contract (typescript using Taquito)'
 
 
 compile: compile_js
@@ -22,7 +24,7 @@ compile_js: jsligo/contract.jsligo
 	@echo "Compiling to Michelson in JSON format"
 	@$(ligo_compiler) compile contract jsligo/contract.jsligo $(json) $(protocol) > compiled/Multisig_jsligo.json
 
-install: 
+install:
 	@echo "npm ci"
 	@npm ci
 
