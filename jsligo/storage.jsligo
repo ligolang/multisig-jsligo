@@ -29,10 +29,7 @@ export namespace Types {
 
 export namespace Utils {
     // @inline
-    const new_storage = (
-        [signers, threshold]:
-        [set<address>, nat]
-    ): Types.t => ({
+    const new_storage = (signers: set<address>, threshold: nat): Types.t => ({
         proposal_counter: 0 as nat,
         proposal_map: Big_map.empty as big_map<nat, Types.proposal>,
         signers: signers,
@@ -52,7 +49,7 @@ export namespace Utils {
         });
 
     // @inline
-    const register_proposal = ([proposal, storage]: [Types.proposal, Types.t]): Types.t => {
+    const register_proposal = (proposal: Types.proposal, storage: Types.t): Types.t => {
         const proposal_counter = storage.proposal_counter + (1 as nat);
         const proposal_map = Big_map.add(proposal_counter,
             proposal,
@@ -66,20 +63,14 @@ export namespace Utils {
     };
 
     // @inline
-    const retrieve_proposal = (
-        [proposal_number, storage]:
-        [nat, Types.t]
-    ): Types.proposal =>
+    const retrieve_proposal = (proposal_number: nat, storage: Types.t): Types.proposal =>
         (match(Big_map.find_opt(proposal_number, storage.proposal_map), {
             None: () => failwith(Errors.no_proposal_exist),
             Some: (proposal: Types.proposal) => proposal
         }));
 
     // @inline
-    const add_signer_to_proposal = (
-        [proposal, signer, threshold]:
-        [Types.proposal, address, nat]
-    ): Types.proposal => {
+    const add_signer_to_proposal = (proposal: Types.proposal, signer: address, threshold: nat): Types.proposal => {
         const approved_signers: set<address> = Set.add(signer, proposal.approved_signers);
         const executed: bool = Set.cardinal(approved_signers) >= threshold || proposal.executed;
         return {
@@ -91,10 +82,7 @@ export namespace Utils {
     };
 
     // @inline
-    const update_proposal = (
-        [proposal_number, proposal, storage]:
-        [Parameter.Types.proposal_number, Types.proposal, Types.t]
-    ): Types.t => {
+    const update_proposal = (proposal_number: Parameter.Types.proposal_number, proposal: Types.proposal, storage: Types.t): Types.t => {
         const proposal_map = Big_map.update(proposal_number, Some(proposal), storage.proposal_map);
             return {
                 ...storage,
