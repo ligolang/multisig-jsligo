@@ -17,12 +17,12 @@ help:
 
 compile: compile_js
 
-compile_js: jsligo/contract.jsligo
+compile_js: contracts/main.jsligo
 	@if [ ! -d ./compiled ]; then mkdir ./compiled ; fi
 	@echo "Compiling to Michelson"
-	@$(ligo_compiler) compile contract jsligo/contract.jsligo $(protocol) > compiled/Multisig_jsligo.tz
+	@$(ligo_compiler) compile contract contracts/main.jsligo $(protocol) > compiled/Multisig_jsligo.tz
 	@echo "Compiling to Michelson in JSON format"
-	@$(ligo_compiler) compile contract jsligo/contract.jsligo $(json) $(protocol) > compiled/Multisig_jsligo.json
+	@$(ligo_compiler) compile contract contracts/main.jsligo $(json) $(protocol) > compiled/Multisig_jsligo.json
 
 install:
 	@echo "npm ci"
@@ -40,9 +40,10 @@ test: test/multisig.test.jsligo
 	@echo "Running mutation tests"
 	@$(ligo_compiler) run test test/multisig_mutation.test.jsligo $(protocol)
 
-deploy: origination/deployMultisig.ts
-	@if [ ! -f ./origination/metadata.json ]; then cp origination/metadata.json.dist \
-        origination/metadata.json ; fi
+deploy: deploy/deployMultisig.ts
+	@if [ ! -f ./deploy/metadata.json ]; then cp deploy/metadata.json.dist \
+        deploy/metadata.json ; fi
 	@echo "Deploying contract"
-	@tsc origination/deployMultisig.ts --esModuleInterop --resolveJsonModule
-	@node origination/deployMultisig.js
+	@tsc deploy/deployMultisig.ts --esModuleInterop --resolveJsonModule
+	@node deploy/deployMultisig.js
+	

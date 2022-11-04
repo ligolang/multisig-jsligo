@@ -1,4 +1,4 @@
-#import "../fa2/fa2.mligo" "FA2"
+#import "fa2/fa2.mligo" "FA2"
 export namespace Types {
     export type proposal_params = 
     //@ layout:comb

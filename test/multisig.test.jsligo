@@ -1,6 +1,6 @@
-#import "../fa2/fa2.mligo" "FA2"
+#import "../contracts/fa2/fa2.mligo" "FA2"
 
-#import "../jsligo/contract.jsligo" "Main"
+#import "../contracts/main.jsligo" "Main"
 
 
 export type func_main = (p: Main.Parameter.Types.t, s: Main.Storage.Types.t) =>  Main.result;

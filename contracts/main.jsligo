@@ -1,8 +1,8 @@
-#import "../common/constants.mligo" "Constants"
+#import "common/constants.mligo" "Constants"
 #import "parameter.jsligo" "Parameter"
 #import "storage.jsligo" "Storage"
 #import "conditions.jsligo" "Conditions"
-#import "contracts/fa2.jsligo" "FA2"
+#import "fa2.jsligo" "FA2"
 
 type request = [Parameter.Types.t, Storage.Types.t];
 export type result = [list<operation>, Storage.Types.t];

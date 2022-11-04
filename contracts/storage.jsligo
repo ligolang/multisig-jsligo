@@ -1,6 +1,6 @@
 #import "parameter.jsligo" "Parameter"
-#import "../common/errors.mligo" "Errors"
-#import "../fa2/fa2.mligo" "FA2"
+#import "common/errors.mligo" "Errors"
+#import "fa2/fa2.mligo" "FA2"
 
 
 

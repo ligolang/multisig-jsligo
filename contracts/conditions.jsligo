@@ -1,4 +1,4 @@
-#import "../common/errors.mligo" "Errors"
+#import "common/errors.mligo" "Errors"
 #import "storage.jsligo" "Storage"
 
 // @inline
