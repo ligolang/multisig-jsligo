@@ -8,10 +8,10 @@
     "authors": [
         "smart-chain <tezos@smart-chain.fr>"
     ],
-    "homepage": "https://github.com/ligolang/multisig-jsligo",
+    "homepage": "https://github.com/ligolang/multisig-cameligo",
     "source": {
-        "tools": "jsligo",
-        "location": "https://github.com/ligolang/multisig-jsligo/contracts"
+        "tools": "cameligo",
+        "location": "https://github.com/ligolang/multisig-cameligo/contracts"
     },
     "interfaces": [
         "TZIP-016"
