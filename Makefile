@@ -20,9 +20,9 @@ compile: compile_js
 compile_js: src/contract.jsligo
 	@if [ ! -d ./compiled ]; then mkdir ./compiled ; fi
 	@echo "Compiling to Michelson"
-	@$(ligo_compiler) compile contract src/contract.jsligo $(protocol) > compiled/Multisig.tz
+	@$(ligo_compiler) compile contract src/contract.jsligo $(protocol_opt) > compiled/Multisig.tz
 	@echo "Compiling to Michelson in JSON format"
-	@$(ligo_compiler) compile contract src/contract.jsligo $(json) $(protocol) > compiled/Multisig.json
+	@$(ligo_compiler) compile contract src/contract.jsligo $(json) $(protocol_opt) > compiled/Multisig.json
 
 clean:
 	@echo "Removing Michelson files"
@@ -32,9 +32,9 @@ clean:
 
 test: test/multisig.test.jsligo
 	@echo "Running tests"
-	@$(ligo_compiler) run test test/multisig.test.jsligo $(protocol)
+	@$(ligo_compiler) run test test/multisig.test.jsligo $(protocol_opt)
 	@echo "Running mutation tests"
-	@$(ligo_compiler) run test test/multisig_mutation.test.jsligo $(protocol)
+	@$(ligo_compiler) run test test/multisig_mutation.test.jsligo $(protocol_opt)
 
 deploy: node_modules deploy.js
 
