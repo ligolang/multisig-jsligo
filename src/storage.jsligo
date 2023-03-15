@@ -42,18 +42,21 @@ export namespace Utils {
 
 
     // @inline
-    const create_proposal = (params: Parameter.Types.proposal_params): Types.proposal => ({
+    const create_proposal = (params: Parameter.Types.proposal_params): Types.proposal => {
+        /* @no_mutation */  let number_of_signer = 1 as nat;   
+        return {
             approved_signers: Set.literal(list([(Tezos.get_sender ())])),
             executed: false,
-            number_of_signer: 1 as nat,
+            number_of_signer,
             target_fa2: params.target_fa2,
             timestamp: (Tezos.get_now ()),
             transfers: params.transfers
-        });
+        }
+    };
 
     // @inline
-    const register_proposal = ([proposal, storage]: [Types.proposal, Types.t]): Types.t => {
-        const proposal_counter = storage.proposal_counter + (1 as nat);
+    const register_proposal = (proposal: Types.proposal, storage: Types.t): Types.t => {
+        /* @no_mutation */ const proposal_counter = storage.proposal_counter + (1 as nat);
         const proposal_map = Big_map.add(proposal_counter,
             proposal,
             storage.proposal_map
@@ -66,35 +69,27 @@ export namespace Utils {
     };
 
     // @inline
-    const retrieve_proposal = (
-        [proposal_number, storage]:
-        [nat, Types.t]
-    ): Types.proposal =>
+    const retrieve_proposal = (proposal_number: nat, storage: Types.t): Types.proposal =>
         (match(Big_map.find_opt(proposal_number, storage.proposal_map), {
             None: () => failwith(Errors.no_proposal_exist),
             Some: (proposal: Types.proposal) => proposal
         }));
 
     // @inline
-    const add_signer_to_proposal = (
-        [proposal, signer, threshold]:
-        [Types.proposal, address, nat]
-    ): Types.proposal => {
+    const add_signer_to_proposal = (proposal: Types.proposal, signer: address, threshold: nat): Types.proposal => {
         const approved_signers: set<address> = Set.add(signer, proposal.approved_signers);
         const executed: bool = Set.cardinal(approved_signers) >= threshold || proposal.executed;
+        /* @no_mutation */ const number_of_signer = proposal.number_of_signer + (1 as nat);
         return {
             ...proposal,
             approved_signers: approved_signers,
-            number_of_signer: proposal.number_of_signer + (1 as nat),
+            number_of_signer,
             executed: executed
         };
     };
 
     // @inline
-    const update_proposal = (
-        [proposal_number, proposal, storage]:
-        [Parameter.Types.proposal_number, Types.proposal, Types.t]
-    ): Types.t => {
+    const update_proposal = (proposal_number: Parameter.Types.proposal_number, proposal: Types.proposal, storage: Types.t): Types.t => {
         const proposal_map = Big_map.update(proposal_number, Some(proposal), storage.proposal_map);
             return {
                 ...storage,
