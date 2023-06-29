@@ -42,7 +42,7 @@ export namespace Utils {
 
 
     // @inline
-    const create_proposal = (params: Parameter.Types.proposal_params): Types.proposal => {
+    export const create_proposal = (params: Parameter.Types.proposal_params): Types.proposal => {
         /* @no_mutation */  let number_of_signer = 1 as nat;   
         return {
             approved_signers: Set.literal(list([(Tezos.get_sender ())])),
@@ -55,7 +55,7 @@ export namespace Utils {
     };
 
     // @inline
-    const register_proposal = (proposal: Types.proposal, storage: Types.t): Types.t => {
+    export const register_proposal = (proposal: Types.proposal, storage: Types.t): Types.t => {
         /* @no_mutation */ const proposal_counter = storage.proposal_counter + (1 as nat);
         const proposal_map = Big_map.add(proposal_counter,
             proposal,
@@ -69,14 +69,14 @@ export namespace Utils {
     };
 
     // @inline
-    const retrieve_proposal = (proposal_number: nat, storage: Types.t): Types.proposal =>
+    export const retrieve_proposal = (proposal_number: nat, storage: Types.t): Types.proposal =>
         (match(Big_map.find_opt(proposal_number, storage.proposal_map), {
             None: () => failwith(Errors.no_proposal_exist),
             Some: (proposal: Types.proposal) => proposal
         }));
 
     // @inline
-    const add_signer_to_proposal = (proposal: Types.proposal, signer: address, threshold: nat): Types.proposal => {
+    export const add_signer_to_proposal = (proposal: Types.proposal, signer: address, threshold: nat): Types.proposal => {
         const approved_signers: set<address> = Set.add(signer, proposal.approved_signers);
         const executed: bool = Set.cardinal(approved_signers) >= threshold || proposal.executed;
         /* @no_mutation */ const number_of_signer = proposal.number_of_signer + (1 as nat);
@@ -89,7 +89,7 @@ export namespace Utils {
     };
 
     // @inline
-    const update_proposal = (proposal_number: Parameter.Types.proposal_number, proposal: Types.proposal, storage: Types.t): Types.t => {
+    export const update_proposal = (proposal_number: Parameter.Types.proposal_number, proposal: Types.proposal, storage: Types.t): Types.t => {
         const proposal_map = Big_map.update(proposal_number, Some(proposal), storage.proposal_map);
             return {
                 ...storage,

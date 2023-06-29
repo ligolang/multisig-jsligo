@@ -7,13 +7,13 @@
 // ===============================================================================================
 
 namespace Preamble {
-    const prepare_new_proposal = (params: Parameter.Types.proposal_params, storage: Storage.Types.t): Storage.Types.proposal => {
+    export const prepare_new_proposal = (params: Parameter.Types.proposal_params, storage: Storage.Types.t): Storage.Types.proposal => {
         Conditions.only_signer(storage);
         Conditions.amount_must_be_zero_tez((Tezos.get_amount ())); 
         return Storage.Utils.create_proposal(params);
     };
 
-    const retrieve_a_proposal = (proposal_number: nat, storage: Storage.Types.t): Storage.Types.proposal => {
+    export const retrieve_a_proposal = (proposal_number: nat, storage: Storage.Types.t): Storage.Types.proposal => {
         Conditions.only_signer(storage);
         const target_proposal: Storage.Types.proposal = Storage.Utils.retrieve_proposal(proposal_number, storage);
         Conditions.not_yet_signer(target_proposal);
