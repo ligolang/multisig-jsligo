@@ -27,7 +27,7 @@ type request = [Parameter.Types.t, Storage.Types.t];
 export type result = [list<operation>, Storage.Types.t];
 
 
-const create_proposal = (params: Parameter.Types.proposal_params, storage: Storage.Types.t): result => {
+export const create_proposal = (params: Parameter.Types.proposal_params, storage: Storage.Types.t): result => {
     const proposal = Preamble.prepare_new_proposal(params, storage);
     const final_storage = Storage.Utils.register_proposal(proposal, storage);
     return [Constants.no_operation, final_storage];
@@ -35,7 +35,7 @@ const create_proposal = (params: Parameter.Types.proposal_params, storage: Stora
 
 
 
-const sign_proposal = (proposal_number: nat, storage: Storage.Types.t): result => {
+export const sign_proposal = (proposal_number: nat, storage: Storage.Types.t): result => {
     let proposal = Preamble.retrieve_a_proposal(proposal_number, storage);
     proposal = Storage.Utils.add_signer_to_proposal(proposal, (Tezos.get_sender ()), storage.threshold);
     const final_storage = Storage.Utils.update_proposal(proposal_number, proposal, storage);
@@ -46,7 +46,8 @@ const sign_proposal = (proposal_number: nat, storage: Storage.Types.t): result =
 
 // ===============================================================================================
 
-const main = (action: Parameter.Types.t, store: Storage.Types.t): result => (match (action, {
-        Create_proposal: (p: Parameter.Types.proposal_params) => create_proposal(p, store),
-        Sign_proposal:   (p: nat) => sign_proposal(p, store)
-    }));
+export const main = (action: Parameter.Types.t, store: Storage.Types.t): result =>
+    match(action) {
+        when(Create_proposal(p)): create_proposal(p, store);
+        when(Sign_proposal(p)): sign_proposal(p, store);
+    }

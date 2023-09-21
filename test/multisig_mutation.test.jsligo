@@ -3,22 +3,22 @@
 type main_tuple = (main_multisig: Test_Multisig.func_main, main_fa2: Test_Multisig.func_mainfa2) => unit;
 
 const _test_mutation_complex = (func: main_tuple): unit => {
-    match(Test.mutation_test([Test_Multisig.Main.main, Test_Multisig.FA2.main], ([a, b]) => func(a, b)), {
-    None: () => unit,
-    Some: pmutation => { 
+    match(Test.mutation_test([Test_Multisig.Main.main, Test_Multisig.FA2.main], ([a, b]) => func(a, b))) {
+    when(None): [];
+    when(Some(pmutation)): do { 
         Test.log(pmutation[1]);
     }
-    })
+    }
 };
 
 
 const _test_mutation_func = (func: (mainf: Test_Multisig.func_main) => unit): unit => {
-    match(Test.mutation_test(Test_Multisig.Main.main, func), {
-        None: () => unit,
-        Some: pmutation => { 
+    match(Test.mutation_test(Test_Multisig.Main.main, func)) {
+        when(None): [];
+        when(Some(pmutation)): do { 
             const _mut: option<string> = Test.save_mutation("mutations", pmutation[1]);
         }
-    });
+    };
 }
 const _tests = list([
     Test_Multisig._test_signer_creates_proposal_works, Test_Multisig._test_unknown_creates_proposal_fails,

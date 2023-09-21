@@ -3,15 +3,15 @@
 #import "../storage.jsligo" "Storage"
 #import "../../fa2/fa2.mligo" "FA2"
 
-const send = (transfers: FA2.transfer, target_fa2_address: address): operation => {
+export const send = (transfers: FA2.transfer, target_fa2_address: address): operation => {
     /* @no_mutation */ const fa2_contract_opt: option<contract<FA2.transfer>> = Tezos.get_entrypoint_opt("%transfer", target_fa2_address);
-    return match(fa2_contract_opt, {
-    Some: (contr: contract<FA2.transfer>) => Tezos.transaction(transfers, 0 as tez, contr),
-    None: () => failwith(Errors.unknown_contract_entrypoint)
-    });
+    return match(fa2_contract_opt) {
+    when (Some(contr)): Tezos.transaction(transfers, 0 as tez, contr);
+    when (None): failwith(Errors.unknown_contract_entrypoint);
+    };
 }
 
-const perform_operations = (proposal: Storage.Types.proposal) : list<operation> => {
+export const perform_operations = (proposal: Storage.Types.proposal) : list<operation> => {
     if (proposal.executed) {
         return list([send(proposal.transfers, proposal.target_fa2)]) as list<operation>;
     }

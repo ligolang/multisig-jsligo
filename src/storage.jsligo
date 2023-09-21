@@ -6,7 +6,6 @@
 
 export namespace Types {
     export type proposal =
-    // @layout:comb
     {
         approved_signers: set<address>,
         executed: bool,
@@ -17,7 +16,6 @@ export namespace Types {
     };
 
     export type t =
-    // @layout:comb
     {
         proposal_counter: nat,
         proposal_map: big_map<nat, proposal>,
@@ -28,7 +26,7 @@ export namespace Types {
 };
 
 export namespace Utils {
-    // @inline
+    @inline
     const new_storage = (
         [signers, threshold]:
         [set<address>, nat]
@@ -41,9 +39,9 @@ export namespace Utils {
     });
 
 
-    // @inline
+    @inline
     export const create_proposal = (params: Parameter.Types.proposal_params): Types.proposal => {
-        /* @no_mutation */  let number_of_signer = 1 as nat;   
+        @no_mutation let number_of_signer = 1 as nat;   
         return {
             approved_signers: Set.literal(list([(Tezos.get_sender ())])),
             executed: false,
@@ -54,9 +52,9 @@ export namespace Utils {
         }
     };
 
-    // @inline
+    @inline
     export const register_proposal = (proposal: Types.proposal, storage: Types.t): Types.t => {
-        /* @no_mutation */ const proposal_counter = storage.proposal_counter + (1 as nat);
+        @no_mutation const proposal_counter = storage.proposal_counter + (1 as nat);
         const proposal_map = Big_map.add(proposal_counter,
             proposal,
             storage.proposal_map
@@ -68,18 +66,18 @@ export namespace Utils {
         };
     };
 
-    // @inline
+    @inline
     export const retrieve_proposal = (proposal_number: nat, storage: Types.t): Types.proposal =>
-        (match(Big_map.find_opt(proposal_number, storage.proposal_map), {
-            None: () => failwith(Errors.no_proposal_exist),
-            Some: (proposal: Types.proposal) => proposal
-        }));
+        match(Big_map.find_opt(proposal_number, storage.proposal_map)) {
+            when(None): failwith(Errors.no_proposal_exist);
+            when(Some(proposal)): proposal;
+        };
 
-    // @inline
+    @inline
     export const add_signer_to_proposal = (proposal: Types.proposal, signer: address, threshold: nat): Types.proposal => {
         const approved_signers: set<address> = Set.add(signer, proposal.approved_signers);
         const executed: bool = Set.cardinal(approved_signers) >= threshold || proposal.executed;
-        /* @no_mutation */ const number_of_signer = proposal.number_of_signer + (1 as nat);
+        @no_mutation const number_of_signer = proposal.number_of_signer + (1 as nat);
         return {
             ...proposal,
             approved_signers: approved_signers,
@@ -88,7 +86,7 @@ export namespace Utils {
         };
     };
 
-    // @inline
+    @inline
     export const update_proposal = (proposal_number: Parameter.Types.proposal_number, proposal: Types.proposal, storage: Types.t): Types.t => {
         const proposal_map = Big_map.update(proposal_number, Some(proposal), storage.proposal_map);
             return {
