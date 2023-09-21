@@ -1,15 +1,21 @@
 #import "../common/errors.mligo" "Errors"
+
 #import "storage.jsligo" "Storage"
 
 @inline
-export const only_signer = (storage: Storage.Types.t): unit => 
-    assert_with_error(Set.mem((Tezos.get_sender ()), storage.signers), Errors.only_signer);
+export const only_signer = (storage: Storage.Types.t): unit =>
+    assert_with_error(
+        Set.mem((Tezos.get_sender()), storage.signers),
+        Errors.only_signer
+    );
 
 @inline
-export const amount_must_be_zero_tez = (an_amout: tez) : unit =>
+export const amount_must_be_zero_tez = (an_amout: tez): unit =>
     assert_with_error(an_amout == (0 as tez), Errors.amount_must_be_zero_tez);
 
 @inline
 export const not_yet_signer = (proposal: Storage.Types.proposal): unit =>
-    assert_with_error(!Set.mem((Tezos.get_sender ()), proposal.approved_signers), Errors.has_already_signed);
-
+    assert_with_error(
+        ! Set.mem((Tezos.get_sender()), proposal.approved_signers),
+        Errors.has_already_signed
+    );

@@ -1,21 +1,31 @@
 #import "../common/constants.mligo" "Constants"
+
 #import "parameter.jsligo" "Parameter"
+
 #import "storage.jsligo" "Storage"
+
 #import "conditions.jsligo" "Conditions"
+
 #import "contracts/fa2.jsligo" "FA2"
 
 // ===============================================================================================
 
 namespace Preamble {
-    export const prepare_new_proposal = (params: Parameter.Types.proposal_params, storage: Storage.Types.t): Storage.Types.proposal => {
+    export const prepare_new_proposal = (
+        params: Parameter.Types.proposal_params,
+        storage: Storage.Types.t
+    ): Storage.Types.proposal => {
         Conditions.only_signer(storage);
-        Conditions.amount_must_be_zero_tez((Tezos.get_amount ())); 
+        Conditions.amount_must_be_zero_tez((Tezos.get_amount()));
         return Storage.Utils.create_proposal(params);
     };
-
-    export const retrieve_a_proposal = (proposal_number: nat, storage: Storage.Types.t): Storage.Types.proposal => {
+    export const retrieve_a_proposal = (
+        proposal_number: nat,
+        storage: Storage.Types.t
+    ): Storage.Types.proposal => {
         Conditions.only_signer(storage);
-        const target_proposal: Storage.Types.proposal = Storage.Utils.retrieve_proposal(proposal_number, storage);
+        const target_proposal: Storage.Types.proposal =
+            Storage.Utils.retrieve_proposal(proposal_number, storage);
         Conditions.not_yet_signer(target_proposal);
         return target_proposal;
     };
@@ -24,23 +34,29 @@ namespace Preamble {
 // ===============================================================================================
 
 type request = [Parameter.Types.t, Storage.Types.t];
+
 export type result = [list<operation>, Storage.Types.t];
 
-
-export const create_proposal = (params: Parameter.Types.proposal_params, storage: Storage.Types.t): result => {
+export const create_proposal = (
+    params: Parameter.Types.proposal_params,
+    storage: Storage.Types.t
+): result => {
     const proposal = Preamble.prepare_new_proposal(params, storage);
     const final_storage = Storage.Utils.register_proposal(proposal, storage);
     return [Constants.no_operation, final_storage];
 };
 
-
-
 export const sign_proposal = (proposal_number: nat, storage: Storage.Types.t): result => {
     let proposal = Preamble.retrieve_a_proposal(proposal_number, storage);
-    proposal = Storage.Utils.add_signer_to_proposal(proposal, (Tezos.get_sender ()), storage.threshold);
-    const final_storage = Storage.Utils.update_proposal(proposal_number, proposal, storage);
+    proposal
+    = Storage.Utils.add_signer_to_proposal(
+          proposal,
+          (Tezos.get_sender()),
+          storage.threshold
+      );
+    const final_storage =
+        Storage.Utils.update_proposal(proposal_number, proposal, storage);
     const operations = FA2.perform_operations(proposal);
-
     return [operations, final_storage];
 };
 
@@ -48,6 +64,8 @@ export const sign_proposal = (proposal_number: nat, storage: Storage.Types.t): r
 
 export const main = (action: Parameter.Types.t, store: Storage.Types.t): result =>
     match(action) {
-        when(Create_proposal(p)): create_proposal(p, store);
-        when(Sign_proposal(p)): sign_proposal(p, store);
+        when (Create_proposal(p)):
+            create_proposal(p, store)
+        when (Sign_proposal(p)):
+            sign_proposal(p, store)
     }

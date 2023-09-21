@@ -1,12 +1,12 @@
 #import "../fa2/fa2.mligo" "FA2"
+
 export namespace Types {
-    export type proposal_params =
-    {
+    export type proposal_params = {
         target_fa2: address,
         transfers: FA2.transfer
     };
-
     export type proposal_number = nat;
-
-    export type t = ["Create_proposal", proposal_params] | ["Sign_proposal", proposal_number];
+    export type t =
+        | ["Create_proposal", proposal_params]
+        | ["Sign_proposal", proposal_number];
 };
