@@ -7,8 +7,7 @@
 #import "../../fa2/fa2.mligo" "FA2"
 
 export const send = (transfers: FA2.transfer, target_fa2_address: address): operation => {
-    /* @no_mutation */
-
+    @no_mutation
     const fa2_contract_opt: option<contract<FA2.transfer>> =
         Tezos.get_entrypoint_opt("%transfer", target_fa2_address);
     return match(fa2_contract_opt) {

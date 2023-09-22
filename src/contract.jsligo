@@ -37,6 +37,7 @@ type request = [Parameter.Types.t, Storage.Types.t];
 
 export type result = [list<operation>, Storage.Types.t];
 
+@entry
 export const create_proposal = (
     params: Parameter.Types.proposal_params,
     storage: Storage.Types.t
@@ -46,6 +47,7 @@ export const create_proposal = (
     return [Constants.no_operation, final_storage];
 };
 
+@entry
 export const sign_proposal = (proposal_number: nat, storage: Storage.Types.t): result => {
     let proposal = Preamble.retrieve_a_proposal(proposal_number, storage);
     proposal
@@ -61,6 +63,7 @@ export const sign_proposal = (proposal_number: nat, storage: Storage.Types.t): r
 };
 
 // ===============================================================================================
+// This function is now only used for tests, and will be removed once tests are rewritten
 
 export const main = (action: Parameter.Types.t, store: Storage.Types.t): result =>
     match(action) {
