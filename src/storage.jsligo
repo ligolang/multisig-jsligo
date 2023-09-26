@@ -70,10 +70,10 @@ export namespace Utils {
 
     // @inline
     export const retrieve_proposal = (proposal_number: nat, storage: Types.t): Types.proposal =>
-        (match(Big_map.find_opt(proposal_number, storage.proposal_map), {
-            None: () => failwith(Errors.no_proposal_exist),
-            Some: (proposal: Types.proposal) => proposal
-        }));
+        match(Big_map.find_opt(proposal_number, storage.proposal_map)) {
+            when (None()) : failwith(Errors.no_proposal_exist);
+            when(Some(proposal)) : proposal
+        };
 
     // @inline
     export const add_signer_to_proposal = (proposal: Types.proposal, signer: address, threshold: nat): Types.proposal => {
