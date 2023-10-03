@@ -193,7 +193,7 @@ export const test_unknown_signs_unknown_proposal_fails = do {
     assert_error(fail_sign_tx, Main.Conditions.Errors.only_signer);
 };
 
-export const test_signer_signs_unknown_proposal_fails = do {
+const test_signer_signs_unknown_proposal_fails = do {
     const orig = Test.originate(contract_of(Main), storage, 0 as tez);
     Test.set_source(alice);
     const fail_sign_tx =
