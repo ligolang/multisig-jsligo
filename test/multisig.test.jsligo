@@ -205,7 +205,7 @@ const test_signer_signs_unknown_proposal_fails = do {
     assert_error(fail_sign_tx, Main.Conditions.Errors.no_proposal_exist);
 };
 
-export const signer_creates_proposal_signers_sign_proposal_execute_works = do {
+const signer_creates_proposal_signers_sign_proposal_execute_works = do {
     Test.set_source(alice);
     const orig = Test.originate(contract_of(Main), storage, 0 as tez);
     const addr = Test.to_address (orig.addr);
