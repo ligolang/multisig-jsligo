@@ -129,7 +129,7 @@ export const test_unknown_creates_proposal_fails = do {
     assert(curr_storage == storage);
 };
 
-export const test_signer_signs_proposal_works = do {
+const test_signer_signs_proposal_works = do {
     const init_proposal: Main.Storage.Types.proposal = {
         approved_signers: Set.add(alice, Set.empty as set<address>),
         executed: false,
