@@ -298,7 +298,7 @@ const signer_creates_proposal_signers_sign_proposal_execute_works = do {
     assert(owner == bob);
 };
 
-export const _signer_creates_proposal_signers_sign_proposal_execute_over_threshold_works = do {
+const _signer_creates_proposal_signers_sign_proposal_execute_over_threshold_works = do {
     Test.set_source(alice);
     const storage_init = { ...storage, threshold: 1 as nat };
     const orig = Test.originate(contract_of(Main), storage_init, 0 as tez);
