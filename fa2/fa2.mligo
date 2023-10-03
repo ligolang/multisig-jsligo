@@ -185,6 +185,7 @@ type transfer_from =
 
 type transfer = transfer_from list
 
+[@entry]
 let transfer : transfer -> storage -> operation list * storage =
   fun (t : transfer)
     (s : storage) -> (* This function process the "tx" list. Since all transfer share the same "from_" address, we use a se *)
@@ -234,6 +235,7 @@ type balance_of =
 
 (** Balance_of entrypoint *)
 
+[@entry]
 let balance_of : balance_of -> storage -> operation list * storage =
   fun (b : balance_of)
     (s : storage) -> let {
@@ -273,7 +275,8 @@ type unit_update =
 
 type update_operators = unit_update list
 
-let update_ops : update_operators -> storage -> operation list * storage =
+[@entry]
+let update_operators : update_operators -> storage -> operation list * storage =
   fun (updates : update_operators)
     (s : storage) -> let update_operator
       (operators, update : Operators.t * unit_update) =
@@ -296,20 +299,10 @@ let update_ops : update_operators -> storage -> operation list * storage =
     ([] : operation list), s
 
 (** If transfer_policy is  No_transfer or Owner_transfer
-let update_ops : update_operators -> storage -> operation list * storage =
+[@entry]
+let update_operators : update_operators -> storage -> operation list * storage =
    fun (updates: update_operators) (s: storage) ->
    let () = failwith Errors.not_supported in
    ([]: operation list),s
 *)
 
-type parameter =
-  [@layout comb]
-  | Transfer of transfer
-  | Balance_of of balance_of
-  | Update_operators of update_operators
-
-let main (p : parameter) (s : storage) =
-  match p with
-    Transfer p -> transfer p s
-  | Balance_of p -> balance_of p s
-  | Update_operators p -> update_ops p s
