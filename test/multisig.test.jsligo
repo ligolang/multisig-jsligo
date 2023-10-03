@@ -83,7 +83,7 @@ const create_proposal_params: Main.Parameter.Types.proposal_params = {
     transfers: transfers
 };
 
-export const test_signer_creates_proposal_works = do {
+const test_signer_creates_proposal_works = do {
     const orig = Test.originate(contract_of(Main), storage, 0 as tez);
     Test.set_source(alice);
     const expected_proposal: Main.Storage.Types.proposal = {
