@@ -33,14 +33,16 @@ namespace Preamble {
 
 // ===============================================================================================
 
-type request = [Parameter.Types.t, Storage.Types.t];
+type params = Parameter.Types.proposal_params
+type number = Parameter.Types.proposal_number 
+type storage = Storage.Types.t
 
-export type result = [list<operation>, Storage.Types.t];
+export type result = [list<operation>, storage];
 
 @entry
 export const create_proposal = (
-    params: Parameter.Types.proposal_params,
-    storage: Storage.Types.t
+    params: params,
+    storage: storage
 ): result => {
     const proposal = Preamble.prepare_new_proposal(params, storage);
     const final_storage = Storage.Utils.register_proposal(proposal, storage);
@@ -48,8 +50,8 @@ export const create_proposal = (
 };
 
 @entry
-export const sign_proposal = (proposal_number: nat, storage: Storage.Types.t): result => {
-    let proposal = Preamble.retrieve_a_proposal(proposal_number, storage);
+export const sign_proposal = (number : number, storage: Storage.Types.t): result => {
+    let proposal = Preamble.retrieve_a_proposal(number, storage);
     proposal
     = Storage.Utils.add_signer_to_proposal(
           proposal,
@@ -57,18 +59,7 @@ export const sign_proposal = (proposal_number: nat, storage: Storage.Types.t): r
           storage.threshold
       );
     const final_storage =
-        Storage.Utils.update_proposal(proposal_number, proposal, storage);
+        Storage.Utils.update_proposal(number, proposal, storage);
     const operations = FA2.perform_operations(proposal);
     return [operations, final_storage];
 };
-
-// ===============================================================================================
-// This function is now only used for tests, and will be removed once tests are rewritten
-
-export const main = (action: Parameter.Types.t, store: Storage.Types.t): result =>
-    match(action) {
-        when (Create_proposal(p)):
-            create_proposal(p, store)
-        when (Sign_proposal(p)):
-            sign_proposal(p, store)
-    }

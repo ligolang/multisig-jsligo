@@ -6,7 +6,4 @@ export namespace Types {
         transfers: FA2.transfer
     };
     export type proposal_number = nat;
-    export type t =
-        | ["Create_proposal", proposal_params]
-        | ["Sign_proposal", proposal_number];
 };
